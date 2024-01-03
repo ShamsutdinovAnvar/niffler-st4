@@ -10,6 +10,8 @@ services:
       - POSTGRES_PASSWORD=secret
     volumes:
       - ./postgres:/docker-entrypoint-initdb.d
+#      для докера оставляем запись ниже
+#      - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres", "-d", "postgres" ]
       interval: 3s
