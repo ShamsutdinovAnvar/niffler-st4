@@ -1,28 +1,14 @@
 package guru.qa.niffler.test;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateCategory;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.page.LoginPage;
-import guru.qa.niffler.page.MainPage;
-import guru.qa.niffler.page.WelcomePage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class SpendingTest {
-
-  private final WelcomePage welcomePage = new WelcomePage();
-  private final MainPage mainPage = new MainPage();
-  private final LoginPage loginPage = new LoginPage();
-
-  static {
-    Configuration.browserSize = "1980x1024";
-    //    Configuration.holdBrowserOpen = true;
-
-  }
+public class SpendingTest extends BaseWebTest {
 
   @GenerateCategory(
           username = "duck",

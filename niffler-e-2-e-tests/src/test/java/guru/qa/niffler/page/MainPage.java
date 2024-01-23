@@ -10,8 +10,12 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class MainPage {
+
     private final ElementsCollection spendingsTableRows = $(".spendings-table tbody").$$("tr");
     private final SelenideElement deleteSelectedButton = $(byText("Delete selected"));
+    private final SelenideElement friendsButton = $("[data-tooltip-id=friends]");
+    private final SelenideElement allPeopleButton = $("[data-tooltip-id=people]");
+    private final SelenideElement profileButton = $("[data-tooltip-id=profile]");
 
     @Step("Выбрать трату с описанием [{description}]")
     public MainPage selectSpendingByDescription(String description) {
@@ -33,5 +37,20 @@ public class MainPage {
     public MainPage checkSpendingsTableRowsHasSize(int size) {
         spendingsTableRows.shouldHave(size(size));
         return this;
+    }
+
+    @Step("Нажать кнопку [Friends]")
+    public void clickFriendsButton() {
+        friendsButton.click();
+    }
+
+    @Step("Нажать кнопку [All people]")
+    public void clickAllPeopleButton() {
+        allPeopleButton.click();
+    }
+
+    @Step("Нажать кнопку [Profile]")
+    public void clickProfileButton() {
+        profileButton.click();
     }
 }
