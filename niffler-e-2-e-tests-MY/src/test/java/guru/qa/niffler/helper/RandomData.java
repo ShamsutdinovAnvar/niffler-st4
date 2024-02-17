@@ -1,12 +1,18 @@
 package guru.qa.niffler.helper;
 
 import com.github.javafaker.Faker;
+import lombok.Getter;
 
+@Getter
 public class RandomData {
-    private static final Faker faker = new Faker();
+    private final Faker faker = new Faker();
 
-    public static String
-            userName = faker.name().firstName(),
-            userPassword = faker.beer().hop();
-
+    public String getUserName(){
+        String userName;
+        return userName = faker.name().firstName();
+    }
+    public String getUserPassword(){
+        String userPassword;
+        return userPassword = faker.beer().hop();
+    }
 }

@@ -8,10 +8,8 @@ import java.util.UUID;
 
 public interface UserRepository {
     static UserRepository getRepository() {
-        String repository = System.getProperty("repository");
-        if (repository == null || repository.isEmpty()) {
-            repository = "jdbc";
-        }
+        String repository = System.getProperty("repository", "jdbc");
+
         if ("jdbc".equals(repository)) {
             return new UserRepositoryJdbc();
         } else if ("sjdbc".equals(repository)) {

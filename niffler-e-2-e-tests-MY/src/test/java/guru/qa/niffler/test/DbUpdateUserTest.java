@@ -25,7 +25,7 @@ public class DbUpdateUserTest {
     private UserEntity user;
 
 
-    private final String USERNAME = RandomData.userName;
+    private final String USERNAME = new RandomData().getUserName();
 
     @BeforeEach
     void createUser() {

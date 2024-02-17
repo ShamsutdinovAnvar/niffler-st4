@@ -194,8 +194,8 @@ public class UserRepositoryJdbc implements UserRepository {
                     authorityDeletePs.clearParameters();
                 }
 
-                authorityInsertPs.executeBatch();
                 authorityDeletePs.executeBatch();
+                authorityInsertPs.executeBatch();
 
                 conn.commit();
             } catch (Exception e) {
