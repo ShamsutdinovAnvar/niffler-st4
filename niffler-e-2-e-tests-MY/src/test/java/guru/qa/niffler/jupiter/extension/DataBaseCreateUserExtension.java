@@ -29,8 +29,8 @@ public class DataBaseCreateUserExtension implements BeforeEachCallback, AfterTes
 
         if (dbUserAnnotation.isPresent()) {
             DbUser dbUser = dbUserAnnotation.get();
-            String username = dbUser.username().isEmpty() ? RandomData.userName : dbUser.username();
-            String password = dbUser.password().isEmpty() ? RandomData.userPassword : dbUser.password();
+            String username = dbUser.username().isEmpty() ? new RandomData().getUserName() : dbUser.username();
+            String password = dbUser.password().isEmpty() ? new RandomData().getUserPassword() : dbUser.password();
 
             UserAuthEntity userAuth = new UserAuthEntity();
             userAuth.setUsername(username);
