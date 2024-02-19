@@ -1,7 +1,7 @@
 package guru.qa.niffler.test;
 
 import guru.qa.niffler.db.model.*;
-import guru.qa.niffler.db.repository.UserRepository;
+import guru.qa.niffler.db.repository.user.UserRepository;
 import guru.qa.niffler.helper.RandomData;
 import guru.qa.niffler.jupiter.extension.UserRepositoryExtension;
 import org.junit.jupiter.api.AfterEach;

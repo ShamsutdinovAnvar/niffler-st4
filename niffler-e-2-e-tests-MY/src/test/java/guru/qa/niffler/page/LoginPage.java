@@ -9,6 +9,14 @@ public class LoginPage {
     private final SelenideElement usernameInput = $("input[name='username']");
     private final SelenideElement passwordInput = $("input[name='password']");
     private final SelenideElement signInButton = $("button[type='submit']");
+    private final SelenideElement loginButton = $("a[href*='redirect']");
+
+    @Step("Перейти на страницу авторизации")
+    public LoginPage clickNifflerAuthorizationPage() {
+        loginButton.click();
+
+        return this;
+    }
 
     @Step("Заполнить поле username [{username}]")
     public LoginPage setUsername(String username) {

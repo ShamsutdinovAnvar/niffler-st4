@@ -1,7 +1,6 @@
 package guru.qa.niffler.jupiter.extension;
 
-import guru.qa.niffler.api.SpendApi;
-import guru.qa.niffler.jupiter.annotation.GenerateCategory;
+import guru.qa.niffler.api.spend.SpendApi;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
@@ -12,13 +11,23 @@ import org.junit.platform.commons.support.AnnotationSupport;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 
-public class GenerateSpendExtension implements BeforeEachCallback {
+public class RestSpendExtension extends SpendExtension implements BeforeEachCallback {
 
-    public static final ExtensionContext.Namespace GENERATE_SPEND_NAMESPACE
-            = ExtensionContext.Namespace.create(GenerateSpendExtension.class);
+    @Override
+    public SpendJson create(SpendJson spend) {
+        try {
+            return spendApi.addSpend(spend).execute().body();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static final ExtensionContext.Namespace NAMESPACE
+            = ExtensionContext.Namespace.create(RestSpendExtension.class);
 
     private static final OkHttpClient HTTP_CLIENT = new OkHttpClient.Builder().build();
     private static final Retrofit RETROFIT = new Retrofit.Builder()
@@ -31,33 +40,34 @@ public class GenerateSpendExtension implements BeforeEachCallback {
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
-        Optional<GenerateSpend> spendAnnotation = AnnotationSupport.findAnnotation(
+
+        Optional<GenerateSpend> spend = AnnotationSupport.findAnnotation(
                 extensionContext.getRequiredTestMethod(),
                 GenerateSpend.class
         );
 
-        Optional<GenerateCategory> categoryAnnotation = AnnotationSupport.findAnnotation(
-                extensionContext.getRequiredTestMethod(),
-                GenerateCategory.class
-        );
+        if (spend.isPresent()) {
+            GenerateSpend spendData = spend.get();
 
-        if (spendAnnotation.isPresent() && categoryAnnotation.isPresent()) {
-            GenerateSpend spendData = spendAnnotation.get();
-            CategoryJson categoryData = extensionContext.getStore(GenerateCategoryExtension.GENERATE_CATEGORY_NAMESPACE)
-                    .get(extensionContext.getUniqueId(), CategoryJson.class);
+            CategoryJson categoryJson = (CategoryJson)
+                    extensionContext.getStore(CategoryExtension.NAMESPACE).get("category");
+
+            if (categoryJson == null) {
+                throw new Exception("Store не содержит данные о категории!");
+            }
 
             SpendJson spendJson = new SpendJson(
                     null,
                     new Date(),
-                    categoryData.category(),
+                    categoryJson.category(),
                     spendData.currency(),
                     spendData.amount(),
                     spendData.description(),
-                    categoryData.username()
+                    spendData.username()
             );
 
-            SpendJson created = spendApi.addSpend(spendJson).execute().body();
-            extensionContext.getStore(GENERATE_SPEND_NAMESPACE).put(extensionContext.getUniqueId(), created);
+            extensionContext.getStore(NAMESPACE)
+                    .put(extensionContext.getUniqueId(), create(spendJson));
         }
     }
 }
