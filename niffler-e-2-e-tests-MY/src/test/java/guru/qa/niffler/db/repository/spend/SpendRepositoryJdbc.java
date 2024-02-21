@@ -11,12 +11,11 @@ import java.util.UUID;
 
 public class SpendRepositoryJdbc implements SpendRepository {
 
-    private final DataSource authDs = DataSourceProvider.INSTANCE.dataSource(Database.SPEND);
-
+    private final DataSource spendDs = DataSourceProvider.INSTANCE.dataSource(Database.SPEND);
     @Override
     public SpendEntity createSpend(SpendEntity spendEntity) {
 
-        try (Connection conn = authDs.getConnection()) {
+        try (Connection conn = spendDs.getConnection()) {
             conn.setAutoCommit(false);
 
             try (PreparedStatement spendPs = conn.prepareStatement(

@@ -37,7 +37,7 @@ public class SpendEntity implements Serializable {
     @Column(nullable = false)
     private String description;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private CategoryEntity category;
 

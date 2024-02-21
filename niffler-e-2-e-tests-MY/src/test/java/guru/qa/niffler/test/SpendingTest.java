@@ -10,6 +10,7 @@ import guru.qa.niffler.page.MainPage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
 public class SpendingTest extends BaseWebTest {
   LoginPage loginPage = new LoginPage();
   MainPage mainPage = new MainPage();
@@ -23,15 +24,17 @@ public class SpendingTest extends BaseWebTest {
   }
 
   @GenerateCategory(
-          username = "duck1",
+          username = "duck",
           category = "Обучение"
   )
 
   @GenerateSpend(
-          username = "duck1",
+          username = "duck",
           description = "QA.GURU Advanced 4",
+          category = "Обучение",
           amount = 72500.00,
-          currency = CurrencyValues.RUB
+          currency = CurrencyValues.RUB,
+          spendDate = "2024-02-22"
   )
 
   @Test
