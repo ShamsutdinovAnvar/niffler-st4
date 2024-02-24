@@ -3,62 +3,44 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.CollectionCondition.size;
-import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$x;
 
-public class FriendsPage {
+public class FriendsPage extends BasePage<FriendsPage> {
 
-    private final SelenideElement friendsTable = $(".table tbody");
-    private final SelenideElement noFriendsYetElement = $(byText("There are no friends yet!"));
+    private final String submitInvitationButton = "//*[@data-tooltip-id = 'submit-invitation']";
+    private final String declineInvitationButton = "//*[@data-tooltip-id = 'decline-invitation']";
+    public HeaderPage header = new HeaderPage();
 
-    @Step("Проверить, что в таблице с друзьями у друга [{friendUsername}] есть статус [You are friends]")
-    public FriendsPage checkFriendHasStatusYouAreFriends(String friendUsername) {
-        getTableRowByFriendName(friendUsername).$(byText("You are friends")).shouldBe(visible);
+    private SelenideElement xPathUserRowFactory(String userName) {
+        return $x("//td[normalize-space() = '" + userName + "']/ancestor::tr");
+    }
+
+    @Step("Убедиться, что получено приглашение в друзья от пользователя '{fromUser}'")
+    public FriendsPage checkThatInvitationReceived(String fromUser) {
+        xPathUserRowFactory(fromUser)
+                .$x("." + submitInvitationButton)
+                .shouldBe(visible);
+
+        xPathUserRowFactory(fromUser)
+                .$x("." + declineInvitationButton)
+                .shouldBe(visible);
+
         return this;
     }
 
-    @Step("Проверить, что в таблице с друзьями у друга [{friendUsername}] есть кнопка [Remove friend]")
-    public FriendsPage checkFriendHasRemoveFriendButton(String friendUsername) {
-        getTableRowByFriendName(friendUsername).$("[data-tooltip-id='remove-friend']").shouldBe(visible);
+    @Step("Убедиться, что на странице отсутствует информация о пользователе '{user}'")
+    public FriendsPage checkThatInfoAboutUserNotExist(String user) {
+        xPathUserRowFactory(user)
+                .shouldNotBe(visible);
         return this;
     }
 
-    @Step("Проверить, что в таблице с друзьями у друга [{friendUsername}] есть аватар")
-    public FriendsPage checkFriendHasAvatar(String friendUsername) {
-        getTableRowByFriendName(friendUsername).$(".people__user-avatar").shouldBe(visible);
+    @Step("Убедиться, что пользователь '{user}' добавлен в друзья")
+    public FriendsPage checkThatUserIsFriend(String user) {
+        xPathUserRowFactory(user)
+                .shouldHave(text("You are friends"));
         return this;
-    }
-
-    @Step("Проверить, что в таблице с друзьями нет друзей")
-    public FriendsPage checkFriendsTableHasNoFriends() {
-        friendsTable.$$("tr").shouldHave(size(0));
-        noFriendsYetElement.shouldBe(visible);
-        return this;
-    }
-
-    @Step("Проверить, что таблица с друзьями не пуста")
-    public FriendsPage checkFriendsTableNotEmpty() {
-        friendsTable.$$("tr").shouldHave(sizeGreaterThan(0));
-        noFriendsYetElement.shouldNotBe(visible);
-        return this;
-    }
-
-    @Step("Проверить, что в таблице с друзьями у потенциального друга [{friendUsername}] есть кнопка [Submit invitation]")
-    public FriendsPage checkFriendsTableContainsSubmitInvitationButton(String friendUsername) {
-        getTableRowByFriendName(friendUsername).$("[data-tooltip-id='submit-invitation']").shouldBe(visible);
-        return this;
-    }
-
-    @Step("Проверить, что в таблице с друзьями нет друга с именем [{username}]")
-    public FriendsPage checkFriendsTableNotContainsFriend(String username) {
-        friendsTable.$$("td").findBy(exactOwnText(username)).shouldNotBe(visible);
-        return this;
-    }
-
-    private SelenideElement getTableRowByFriendName(String friendUsername) {
-        return friendsTable.$$("tr").findBy(text(friendUsername));
     }
 }

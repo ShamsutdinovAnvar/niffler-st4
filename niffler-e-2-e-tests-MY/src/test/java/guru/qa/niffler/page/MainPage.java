@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
-public class MainPage {
+public class MainPage extends BasePage<MainPage> {
 
     private final ElementsCollection spendingsTableRows = $(".spendings-table tbody").$$("tr");
     private final SelenideElement spendingTable = $(".spendings-table tbody");
@@ -17,7 +17,7 @@ public class MainPage {
     private final SelenideElement friendsButton = $("[data-tooltip-id=friends]");
     private final SelenideElement allPeopleButton = $("[data-tooltip-id=people]");
     private final SelenideElement profileButton = $("[data-tooltip-id=profile]");
-
+    public HeaderPage header = new HeaderPage();
     @Step("Найти категорию и кликнуть по ней")
     public MainPage findAndClickSelectedCategory(String value) {
         spendingTable.$$("tr")

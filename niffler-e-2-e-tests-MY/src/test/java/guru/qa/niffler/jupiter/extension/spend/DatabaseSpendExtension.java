@@ -1,9 +1,9 @@
-package guru.qa.niffler.jupiter.extension;
+package guru.qa.niffler.jupiter.extension.spend;
 
 import guru.qa.niffler.db.model.CategoryEntity;
 import guru.qa.niffler.db.model.SpendEntity;
 import guru.qa.niffler.db.repository.spend.SpendRepositoryHibernate;
-import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.model.spend.SpendJson;
 
 public class DatabaseSpendExtension extends SpendExtension {
 

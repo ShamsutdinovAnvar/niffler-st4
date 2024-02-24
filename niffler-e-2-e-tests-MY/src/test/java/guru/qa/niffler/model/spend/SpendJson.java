@@ -1,6 +1,7 @@
-package guru.qa.niffler.model;
+package guru.qa.niffler.model.spend;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import guru.qa.niffler.model.currency.CurrencyValues;
 
 import java.util.Date;
 import java.util.UUID;

@@ -5,7 +5,7 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class LoginPage {
+public class LoginPage extends BasePage<LoginPage> {
     private final SelenideElement usernameInput = $("input[name='username']");
     private final SelenideElement passwordInput = $("input[name='password']");
     private final SelenideElement signInButton = $("button[type='submit']");
@@ -33,5 +33,13 @@ public class LoginPage {
     @Step("Нажать кнопку [Sign in]")
     public void clickSignInButton() {
         signInButton.click();
+    }
+
+    @Step("Авторизоваться под пользователем '{login}'")
+    public MainPage doLogin(String login, String password) {
+        usernameInput.setValue(login);
+        passwordInput.setValue(password);
+        signInButton.click();
+        return new MainPage();
     }
 }
