@@ -2,9 +2,10 @@ package guru.qa.niffler.db;
 
 import guru.qa.niffler.config.Config;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @RequiredArgsConstructor
-public enum JdbcUrl {
+public enum Database {
     AUTH("jdbc:postgresql://%s:%d/niffler-auth"),
     CURRENCY("jdbc:postgresql://%s:%d/niffler-currency"),
     SPEND("jdbc:postgresql://%s:%d/niffler-spend"),
@@ -20,5 +21,9 @@ public enum JdbcUrl {
                 cfg.jdbcHost(),
                 cfg.jdbcPort()
         );
+    }
+
+    public String p6spyUrl() {
+        return "jdbc:p6spy:" + StringUtils.substringAfter(getUrl(), "jdbc:");
     }
 }

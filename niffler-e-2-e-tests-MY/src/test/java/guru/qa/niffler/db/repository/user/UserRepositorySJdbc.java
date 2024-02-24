@@ -1,7 +1,7 @@
-package guru.qa.niffler.db.repository;
+package guru.qa.niffler.db.repository.user;
 
 import guru.qa.niffler.db.DataSourceProvider;
-import guru.qa.niffler.db.JdbcUrl;
+import guru.qa.niffler.db.Database;
 import guru.qa.niffler.db.model.UserAuthEntity;
 import guru.qa.niffler.db.model.UserEntity;
 import guru.qa.niffler.db.sjdbc.UserAuthEntityResultSetExtractor;
@@ -15,8 +15,10 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.support.TransactionTemplate;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,10 +33,10 @@ public class UserRepositorySJdbc implements UserRepository {
 
     public UserRepositorySJdbc() {
         JdbcTransactionManager authTm = new JdbcTransactionManager(
-                DataSourceProvider.INSTANCE.dataSource(JdbcUrl.AUTH)
+                DataSourceProvider.INSTANCE.dataSource(Database.AUTH)
         );
         JdbcTransactionManager udTm = new JdbcTransactionManager(
-                DataSourceProvider.INSTANCE.dataSource(JdbcUrl.USERDATA)
+                DataSourceProvider.INSTANCE.dataSource(Database.USERDATA)
         );
 
         this.authTxt = new TransactionTemplate(authTm);
@@ -91,7 +93,7 @@ public class UserRepositorySJdbc implements UserRepository {
                     authTemplate.query(
                             "SELECT * " +
                                     "FROM \"user\" u " +
-                                    "LEFT JOIN \"authority\" a ON u.id = a.user_id " +
+                                    "JOIN \"authority\" a ON u.id = a.user_id " +
                                     "where u.id = ?",
                             UserAuthEntityResultSetExtractor.instance,
                             id
@@ -100,47 +102,6 @@ public class UserRepositorySJdbc implements UserRepository {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
-    }
-
-    @Override
-    public UserAuthEntity updateInAuth(UserAuthEntity user) {
-        return authTxt.execute(status -> {
-            authTemplate.update(con -> {
-                PreparedStatement ps = con.prepareStatement(
-                        "UPDATE \"user\" " +
-                                "SET username = ?, password = ?, enabled = ?, account_non_expired = ?, " +
-                                "account_non_locked = ?, credentials_non_expired = ? " +
-                                "WHERE id = ?",
-                        PreparedStatement.RETURN_GENERATED_KEYS
-                );
-                ps.setString(1, user.getUsername());
-                ps.setString(2, pe.encode(user.getPassword()));
-                ps.setBoolean(3, user.getEnabled());
-                ps.setBoolean(4, user.getAccountNonExpired());
-                ps.setBoolean(5, user.getAccountNonLocked());
-                ps.setBoolean(6, user.getCredentialsNonExpired());
-                ps.setObject(7, user.getId());
-                return ps;
-            });
-
-            authTemplate.update("DELETE FROM \"authority\" WHERE user_id = ?", user.getId());
-
-            authTemplate.batchUpdate("INSERT INTO \"authority\" " +
-                    "(user_id, authority) " +
-                    "VALUES (?, ?)", new BatchPreparedStatementSetter() {
-                @Override
-                public void setValues(PreparedStatement ps, int i) throws SQLException {
-                    ps.setObject(1, user.getId());
-                    ps.setString(2, user.getAuthorities().get(i).getAuthority().name());
-                }
-
-                @Override
-                public int getBatchSize() {
-                    return user.getAuthorities().size();
-                }
-            });
-            return user;
-        });
     }
 
     @Override
@@ -161,6 +122,11 @@ public class UserRepositorySJdbc implements UserRepository {
     }
 
     @Override
+    public List<UserAuthEntity> getUsersFromAuth() {
+        return null;
+    }
+
+    @Override
     public Optional<UserEntity> findByIdInUserdata(UUID id) {
         try {
             return Optional.ofNullable(
@@ -176,18 +142,70 @@ public class UserRepositorySJdbc implements UserRepository {
     }
 
     @Override
-    public UserEntity updateInUserdata(UserEntity user) {
-        udTemplate.update(con -> {
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE \"user\" SET username = ?, currency = ?, firstname = ?, surname = ? WHERE id = ?"
+    public List<UserEntity> getUsersFromUserData() {
+
+        return null;
+    }
+
+    @Override
+    public UserAuthEntity updateInAuth(UserAuthEntity user) {
+        return authTxt.execute(status -> {
+            authTemplate.update(conn -> {
+                PreparedStatement ps = conn.prepareStatement("UPDATE \"user\" SET " +
+                        "password = ?," +
+                        "enabled = ?," +
+                        "account_non_expired = ?," +
+                        "account_non_locked = ?," +
+                        "credentials_non_expired = ? " +
+                        "WHERE id = ?");
+
+                ps.setString(1, user.getPassword());
+                ps.setBoolean(2, user.getEnabled());
+                ps.setBoolean(3, user.getAccountNonExpired());
+                ps.setBoolean(4, user.getAccountNonLocked());
+                ps.setBoolean(5, user.getCredentialsNonExpired());
+                ps.setObject(6, user.getId());
+                return ps;
+            });
+
+            authTemplate.update("DELETE FROM \"authority\" WHERE user_id = ?",user.getId());
+
+            authTemplate.batchUpdate("INSERT INTO \"authority\" (user_id, authority) VALUES (?, ?)",
+                    new BatchPreparedStatementSetter() {
+                        @Override
+                        public void setValues(PreparedStatement ps, int i) throws SQLException {
+                            ps.setObject(1, user.getId());
+                            ps.setString(2, user.getAuthorities().get(i).getAuthority().name());
+                        }
+
+                        @Override
+                        public int getBatchSize() {
+                            return user.getAuthorities().size();
+                        }
+                    }
             );
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getCurrency().name());
-            ps.setString(3, user.getFirstname());
-            ps.setString(4, user.getSurname());
-            ps.setObject(5, user.getId());
-            return ps;
+            return user;
         });
+    }
+
+    @Override
+    public UserEntity updateInUserdata(UserEntity user) {
+        udTemplate.update(conn -> {
+                    PreparedStatement ps = conn.prepareStatement("UPDATE \"user\" SET " +
+                            "currency = ?," +
+                            "firstname = ?," +
+                            "surname = ?," +
+                            "photo = ? " +
+                            "WHERE id = ?");
+
+                    ps.setString(1, user.getCurrency().name());
+                    ps.setString(2, user.getFirstname());
+                    ps.setString(3, user.getSurname());
+                    ps.setBytes(4, user.getPhoto());
+                    ps.setObject(5, user.getId());
+                    return ps;
+                }
+        );
         return user;
     }
 
