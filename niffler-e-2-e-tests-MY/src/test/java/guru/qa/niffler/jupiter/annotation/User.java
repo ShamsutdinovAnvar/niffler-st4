@@ -1,6 +1,6 @@
 package guru.qa.niffler.jupiter.annotation;
 
-import guru.qa.niffler.jupiter.extension.UsersQueueExtension;
+import guru.qa.niffler.jupiter.extension.user.UsersQueueExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.lang.annotation.ElementType;
@@ -17,7 +17,8 @@ public @interface User {
 
     enum UserType {
         WITH_FRIENDS,
-        INVITATION_SENT,
-        INVITATION_RECEIVED
+        COMMON,
+        INVITATION_SEND,
+        INVITATION_RECIEVED
     }
 }

@@ -23,4 +23,17 @@ public interface Config {
     default int jdbcPort() {
         return 5432;
     }
+
+
+    default String spendServiceUrl() {
+        return "http://127.0.0.1:8093";
+    }
+
+    default String currencyServiceUrl() {
+        return "http://127.0.0.1:8091";
+    }
+
+    default String userDataServiceUrl() {
+        return "http://127.0.0.1:8089";
+    }
 }

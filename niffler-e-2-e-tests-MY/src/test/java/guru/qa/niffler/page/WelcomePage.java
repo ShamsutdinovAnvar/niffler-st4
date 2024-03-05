@@ -5,11 +5,20 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class WelcomePage {
-    private final SelenideElement loginButton = $("a[href*='redirect']");
+public class WelcomePage extends BasePage<WelcomePage> {
 
-    @Step("Нажать кнопку [Login]")
-    public void clickLoginButton() {
+    private final SelenideElement loginButton = $("a[href*='redirect']");
+    private final SelenideElement registerButton = $("a[href*='auth']");
+
+    @Step("Перейти к странице логина")
+    public LoginPage goToLoginPage() {
         loginButton.click();
+        return new LoginPage();
+    }
+
+    @Step("Перейти к странице регистрации")
+    public RegisterPage goToRegisterPage() {
+        registerButton.click();
+        return new RegisterPage();
     }
 }

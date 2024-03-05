@@ -1,8 +1,11 @@
-package guru.qa.niffler.model;
+package guru.qa.niffler.model.userdata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import guru.qa.niffler.jupiter.annotation.User;
+import guru.qa.niffler.model.currency.CurrencyValues;
+import guru.qa.niffler.userdata.wsdl.FriendState;
 
 import java.util.UUID;
 
@@ -23,9 +26,9 @@ public record UserJson(
         @JsonProperty("friendState")
         FriendState friendState,
         @JsonIgnore
-        TestData testData
-) {
-    public static UserJson defaultUser(String username, TestData testData) {
+        TestData testData) {
+
+    public static UserJson user(String username, String password, User.UserType userType) {
         return new UserJson(
                 null,
                 username,
@@ -34,7 +37,10 @@ public record UserJson(
                 CurrencyValues.RUB,
                 null,
                 null,
-                testData
+                new TestData(
+                        password,
+                        userType
+                )
         );
     }
 }

@@ -1,7 +1,7 @@
 package guru.qa.niffler.jupiter.converter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.model.spend.SpendJson;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.params.converter.ArgumentConversionException;
 import org.junit.jupiter.params.converter.ArgumentConverter;
