@@ -26,9 +26,10 @@ public record UserJson(
         @JsonProperty("friendState")
         FriendState friendState,
         @JsonIgnore
-        TestData testData) {
+        TestData testData
+) {
+    public static UserJson user(String username, String password, User.UserType userType, String friendName) {
 
-    public static UserJson user(String username, String password, User.UserType userType) {
         return new UserJson(
                 null,
                 username,
@@ -39,6 +40,7 @@ public record UserJson(
                 null,
                 new TestData(
                         password,
+                        friendName,
                         userType
                 )
         );

@@ -36,4 +36,7 @@ public interface Config {
     default String userDataServiceUrl() {
         return "http://127.0.0.1:8089";
     }
+    default String mainPageUrl() {
+        return "http://127.0.0.1:3000/main";
+    }
 }

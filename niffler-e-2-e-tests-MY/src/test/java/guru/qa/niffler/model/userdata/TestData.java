@@ -5,6 +5,7 @@ import guru.qa.niffler.jupiter.annotation.User;
 
 public record TestData(
         @JsonIgnore String password,
+        @JsonIgnore String friendName,
         @JsonIgnore User.UserType userType
 ) {
 }

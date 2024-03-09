@@ -1,45 +1,48 @@
 package guru.qa.niffler.page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage extends BasePage<LoginPage> {
-    private final SelenideElement usernameInput = $("input[name='username']");
-    private final SelenideElement passwordInput = $("input[name='password']");
-    private final SelenideElement signInButton = $("button[type='submit']");
-    private final SelenideElement loginButton = $("a[href*='redirect']");
+
+    private final WelcomePage welcomePage = new WelcomePage();
+
+    private final SelenideElement
+            userNameField = $("input[name='username']"),
+            passField = $("input[name='password']"),
+            submitButton = $("button[type='submit']"),
+            mainContent = $(".main-content__section-stats");
 
     @Step("Перейти на страницу авторизации")
     public LoginPage clickNifflerAuthorizationPage() {
-        loginButton.click();
-
+        welcomePage.loginBtnClick();
         return this;
     }
 
-    @Step("Заполнить поле username [{username}]")
-    public LoginPage setUsername(String username) {
-        usernameInput.setValue(username);
+    @Step("Ввести имя пользователя")
+    public LoginPage setUserName(String value) {
+        userNameField.setValue(value);
         return this;
     }
 
-    @Step("Заполнить поле password [{password}]")
-    public LoginPage setPassword(String password) {
-        passwordInput.setValue(password);
+    @Step("Ввести пароль")
+    public LoginPage setPass(String value) {
+        passField.setValue(value);
         return this;
     }
 
-    @Step("Нажать кнопку [Sign in]")
-    public void clickSignInButton() {
-        signInButton.click();
+    @Step("Нажать подтвердить")
+    public LoginPage submit() {
+        submitButton.click();
+        return this;
     }
 
-    @Step("Авторизоваться под пользователем '{login}'")
-    public MainPage doLogin(String login, String password) {
-        usernameInput.setValue(login);
-        passwordInput.setValue(password);
-        signInButton.click();
-        return new MainPage();
+    @Step("Проверить содержание")
+    public LoginPage checkMainContent() {
+        mainContent.should(Condition.visible);
+        return this;
     }
 }

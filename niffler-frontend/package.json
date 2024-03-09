@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.24.0",
+    "axios": "^1.6.7",
     "buffer": "^6.0.3",
     "caniuse-lite": "^1.0.30001585",
     "chart.js": "^4.2.0",

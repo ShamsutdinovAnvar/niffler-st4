@@ -7,18 +7,18 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class WelcomePage extends BasePage<WelcomePage> {
 
-    private final SelenideElement loginButton = $("a[href*='redirect']");
-    private final SelenideElement registerButton = $("a[href*='auth']");
+    private final SelenideElement loginBtn = $("a[href*='redirect']"),
+            registerBtn = $("a[href*='/register']");
 
-    @Step("Перейти к странице логина")
-    public LoginPage goToLoginPage() {
-        loginButton.click();
-        return new LoginPage();
+    @Step("Перейти на страницу авторизации")
+    public WelcomePage loginBtnClick() {
+        loginBtn.click();
+        return this;
     }
 
-    @Step("Перейти к странице регистрации")
-    public RegisterPage goToRegisterPage() {
-        registerButton.click();
-        return new RegisterPage();
+    @Step("Перейти на страницу регистрации")
+    public WelcomePage registerBtnClick() {
+        registerBtn.click();
+        return this;
     }
 }
