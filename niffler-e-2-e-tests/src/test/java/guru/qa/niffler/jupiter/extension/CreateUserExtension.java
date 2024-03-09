@@ -60,7 +60,7 @@ public abstract class CreateUserExtension implements BeforeEachCallback, Paramet
     if (parameterContext.getParameter().getType().isAssignableFrom(UserJson[].class)) {
       return userJsons.stream().toList().toArray(new UserJson[0]);
     } else {
-      return userJsons.getFirst();
+      return userJsons.get(0);
     }
   }
 
