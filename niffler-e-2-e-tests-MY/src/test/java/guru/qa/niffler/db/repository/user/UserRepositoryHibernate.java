@@ -4,6 +4,7 @@ import guru.qa.niffler.db.EmfProvider;
 import guru.qa.niffler.db.jpa.JpaService;
 import guru.qa.niffler.db.model.UserAuthEntity;
 import guru.qa.niffler.db.model.UserEntity;
+import guru.qa.niffler.db.logging.AllureJsonAppender;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -18,6 +19,7 @@ import static guru.qa.niffler.db.Database.USERDATA;
 public class UserRepositoryHibernate extends JpaService implements UserRepository {
 
     private final PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    private final AllureJsonAppender allureJsonAppender = new AllureJsonAppender();
 
     public UserRepositoryHibernate() {
         super(
@@ -45,6 +47,7 @@ public class UserRepositoryHibernate extends JpaService implements UserRepositor
     @Override
     public UserEntity createInUserdata(UserEntity user) {
         persist(USERDATA, user);
+        allureJsonAppender.logJson("Create in Userdata", user);
         return user;
     }
 

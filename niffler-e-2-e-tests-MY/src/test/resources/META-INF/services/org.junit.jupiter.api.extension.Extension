@@ -1,1 +1,2 @@
 guru.qa.niffler.jupiter.extension.emf.EmfExtension
+guru.qa.niffler.jupiter.extension.ServerLogsExtension

@@ -1,5 +1,5 @@
 <html>
-<#-- @ftlvariable name="data" type="guru.qa.niffler.db.logging.SqlAttachment" -->
+<#-- @ftlvariable name="data" type="guru.qa.niffler.jupiter.logging.JsonAttachment" -->
 <head>
     <meta http-equiv="content-type" content="text/html; charset = UTF-8">
     <script src="https://yastatic.net/jquery/2.2.3/jquery.min.js" crossorigin="anonymous"></script>
@@ -20,9 +20,9 @@
 </head>
 <body>
 
-<h5>SQL Query</h5>
+<h5>Json data</h5>
 <div>
-    <pre><code>${data.sql}</code></pre>
+    <pre><code>${data.json}</code></pre>
 </div>
 
 </body>
