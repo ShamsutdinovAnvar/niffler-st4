@@ -1,6 +1,7 @@
 package guru.qa.niffler.db.repository.user;
 
 import guru.qa.niffler.db.DataSourceProvider;
+import guru.qa.niffler.db.logging.AllureJsonAppender;
 import guru.qa.niffler.db.model.*;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,7 @@ public class UserRepositoryJdbc implements UserRepository {
     private final DataSource authDs = DataSourceProvider.INSTANCE.dataSource(AUTH);
     private final DataSource udDs = DataSourceProvider.INSTANCE.dataSource(USERDATA);
     private final PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    private final AllureJsonAppender allureJsonAppender = new AllureJsonAppender();
 
     @Override
     public UserAuthEntity createInAuth(UserAuthEntity user) {
@@ -104,6 +106,7 @@ public class UserRepositoryJdbc implements UserRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        allureJsonAppender.logJson("Create in Userdata", user);
         return user;
     }
 

@@ -2,6 +2,7 @@ package guru.qa.niffler.db.repository.user;
 
 import guru.qa.niffler.db.DataSourceProvider;
 import guru.qa.niffler.db.Database;
+import guru.qa.niffler.db.logging.AllureJsonAppender;
 import guru.qa.niffler.db.model.UserAuthEntity;
 import guru.qa.niffler.db.model.UserEntity;
 import guru.qa.niffler.db.sjdbc.UserAuthEntityResultSetExtractor;
@@ -30,6 +31,7 @@ public class UserRepositorySJdbc implements UserRepository {
     private final JdbcTemplate udTemplate;
 
     private final PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    private final AllureJsonAppender allureJsonAppender = new AllureJsonAppender();
 
     public UserRepositorySJdbc() {
         JdbcTransactionManager authTm = new JdbcTransactionManager(
@@ -118,6 +120,7 @@ public class UserRepositorySJdbc implements UserRepository {
         }, kh);
 
         user.setId((UUID) kh.getKeys().get("id"));
+        allureJsonAppender.logJson("Create in Userdata", user);
         return user;
     }
 
