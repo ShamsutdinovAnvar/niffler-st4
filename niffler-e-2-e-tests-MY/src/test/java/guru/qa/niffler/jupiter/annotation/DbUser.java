@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-@ExtendWith(DbUserExtension.class)
+@ExtendWith(CreateUserExtension.class)
 public @interface DbUser {
 
     String userName() default "";
