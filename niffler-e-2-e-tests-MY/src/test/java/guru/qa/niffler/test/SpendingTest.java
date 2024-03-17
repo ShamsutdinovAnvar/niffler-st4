@@ -5,9 +5,12 @@ import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.currency.CurrencyValues;
 import guru.qa.niffler.model.spend.SpendJson;
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.codeborne.selenide.CollectionCondition.size;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class SpendingTest extends BaseWebTest {
@@ -40,13 +43,13 @@ public class SpendingTest extends BaseWebTest {
                 .checkSpends(spend)
                 .selectByText(spend.description());
 
-//    Allure.step("Delete spending", () -> $(byText("Delete selected"))
-//        .click());
-//
-//    Allure.step("Check that spending was deleted", () -> {
-//      $(".spendings-table tbody")
-//          .$$("tr")
-//          .shouldHave(size(0));
-//    });
+    Allure.step("Delete spending", () -> $(byText("Delete selected"))
+        .click());
+
+    Allure.step("Check that spending was deleted", () -> {
+      $(".spendings-table tbody")
+          .$$("tr")
+          .shouldHave(size(0));
+    });
     }
 }

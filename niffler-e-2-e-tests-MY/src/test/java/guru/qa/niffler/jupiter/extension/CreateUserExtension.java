@@ -27,11 +27,12 @@ public class CreateUserExtension implements BeforeEachCallback, AfterTestExecuti
     public static final ExtensionContext.Namespace DB_CREATE_USER_NAMESPACE
             = ExtensionContext.Namespace.create(CreateUserExtension.class);
 
-    private static UserRepository userRepository = new UserRepositoryHibernate();
+//    private  UserRepository userRepository = new UserRepositoryHibernate();
 
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
+        UserRepository userRepository = new UserRepositoryHibernate();
         Optional<ApiLogin> apiLoginAnnotation = AnnotationSupport.findAnnotation(
                 extensionContext.getRequiredTestMethod(),
                 ApiLogin.class
@@ -93,6 +94,7 @@ public class CreateUserExtension implements BeforeEachCallback, AfterTestExecuti
 
     @Override
     public void afterTestExecution(ExtensionContext extensionContext) throws Exception {
+        UserRepository userRepository = new UserRepositoryHibernate();
         Map createdUser = extensionContext.getStore(DB_CREATE_USER_NAMESPACE)
                 .get(extensionContext.getUniqueId(), Map.class);
         userRepository.deleteInAuthById(((UserAuthEntity) createdUser.get("auth")).getId());
