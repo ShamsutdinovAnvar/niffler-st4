@@ -27,7 +27,7 @@ public class DbUserExtension implements BeforeEachCallback, AfterTestExecutionCa
         Map<String, Object> userEntities = new HashMap<>();
         if (dbUser.isPresent()) {
             DbUser dbUserData = dbUser.get();
-            String userName = dbUserData.userName();
+            String userName = dbUserData.username();
             String password = dbUserData.password();
             if (userName.isEmpty() && password.isEmpty()) {
                 userName = faker.funnyName().name();

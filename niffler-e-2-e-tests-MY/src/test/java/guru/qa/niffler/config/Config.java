@@ -7,7 +7,7 @@ public interface Config {
                 ? DockerConfig.instance
                 : LocalConfig.instance;
     }
-
+    String authUrl();
     String frontUrl();
 
     String jdbcHost();

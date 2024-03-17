@@ -6,7 +6,7 @@ import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$;
 
 public class WelcomePage extends BasePage<WelcomePage> {
-
+    public static final String URL = CFG.frontUrl();
     private final SelenideElement loginBtn = $("a[href*='redirect']"),
             registerBtn = $("a[href*='/register']");
 
