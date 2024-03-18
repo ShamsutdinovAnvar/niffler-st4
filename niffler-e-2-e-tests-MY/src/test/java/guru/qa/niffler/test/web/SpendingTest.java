@@ -1,10 +1,11 @@
-package guru.qa.niffler.test;
+package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.currency.CurrencyValues;
 import guru.qa.niffler.model.spend.SpendJson;
+import guru.qa.niffler.test.web.BaseWebTest;
 import io.qameta.allure.Allure;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

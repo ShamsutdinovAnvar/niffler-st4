@@ -1,10 +1,11 @@
-package guru.qa.niffler.test;
+package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.db.model.UserAuthEntity;
 import guru.qa.niffler.jupiter.annotation.DbUser;
 import guru.qa.niffler.jupiter.extension.UserRepositoryExtension;
+import guru.qa.niffler.test.web.BaseWebTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 

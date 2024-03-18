@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 
 public class LogTest {
 
-    @Test
-    void logTest() throws Exception {
+  @Test
+  void logTest() throws Exception {
 
-    }
+  }
 }

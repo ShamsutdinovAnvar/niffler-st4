@@ -1,4 +1,4 @@
-package guru.qa.niffler.test.web;
+package guru.qa.niffler.test;
 
 import guru.qa.niffler.jupiter.annotation.ApiLogin;
 import guru.qa.niffler.jupiter.annotation.TestUser;
