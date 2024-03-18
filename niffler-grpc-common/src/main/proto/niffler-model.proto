@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+import "google/type/date.proto";
+
+package guru.qa.grpc.niffler;
+
+option java_multiple_files = true;
+option java_package = "guru.qa.grpc.niffler.grpc";
+option java_outer_classname = "NifflerModelProto";
+
+enum CurrencyValues {
+  UNSPECIFIED = 0;
+  RUB = 1;
+  USD = 2;
+  EUR = 3;
+  KZT = 4;
+}
+
+enum DataFilterValues {
+  TODAY = 0;
+  WEEK = 1;
+  MONTH = 2;
+}
+
+message SpendJson {
+  string id = 1;
+  google.type.Date spendDate = 2;
+  string category = 3;
+  CurrencyValues currency = 4;
+  double amount = 5;
+  string description = 6;
+  string username = 7;
+}
+
+message CategoryJson {
+  string id = 1;
+  string category = 2;
+  string username = 3;
+}
+
+message StatisticByCategoryJson {
+  string category = 1;
+  double total = 2;
+  double totalInUserDefaultCurrency = 3;
+  repeated SpendJson spend = 4;
+}
+
+message StatisticJson {
+  google.type.Date dateFrom = 1;
+  google.type.Date dateTo = 2;
+  CurrencyValues currency = 3;
+  double total = 4;
+  double totalInUserDefaultCurrency = 5;
+  repeated StatisticByCategoryJson categoryStatistics = 6;
+}

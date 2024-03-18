@@ -4,6 +4,10 @@ server:
     include:
       message: true
 
+grpc:
+  server:
+    port: 8094
+
 spring:
   application:
     name: niffler-spend
@@ -64,6 +68,9 @@ grpc:
     grpcCurrencyClient:
       address: 'static://localhost:8092'
       negotiationType: PLAINTEXT
+#    grpcSpendsClient:
+#      address: 'static://localhost:8094'
+#      negotiationType: PLAINTEXT
 
 niffler-currency:
   base-uri: 'http://127.0.0.1:8091'

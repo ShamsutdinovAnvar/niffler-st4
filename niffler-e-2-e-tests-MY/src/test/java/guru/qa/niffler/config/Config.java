@@ -11,6 +11,9 @@ public interface Config {
     String frontUrl();
 
     String jdbcHost();
+    String currencyGrpcHost();
+
+    String spendsGrpcHost();
 
     default String jdbcUser() {
         return "postgres";
@@ -24,6 +27,13 @@ public interface Config {
         return 5432;
     }
 
+    default int currencyGrpcPort() {
+        return 8092;
+    }
+
+    default int spendsGrpcPort() {
+        return 8094;
+    }
 
     default String spendServiceUrl() {
         return "http://127.0.0.1:8093";

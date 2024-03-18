@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import guru.qa.niffler.data.SpendEntity;
 
 import javax.annotation.Nonnull;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -34,5 +35,28 @@ public record SpendJson(
         entity.getUsername()
     );
   }
+    public static @Nonnull SpendJson fromGrpcMessage(@Nonnull guru.qa.grpc.niffler.grpc.SpendJson spendMessage) {
+        return new SpendJson(
+                UUID.fromString(spendMessage.getId()),
+                convertFromGoogleDate(spendMessage.getSpendDate()),
+                spendMessage.getCategory(),
+                CurrencyValues.valueOf(spendMessage.getCurrency().name()),
+                spendMessage.getAmount(),
+                spendMessage.getDescription(),
+                spendMessage.getUsername()
+        );
+    }
 
+    static java.util.Date convertFromGoogleDate(com.google.type.Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setLenient(false);
+        cal.set(Calendar.YEAR, date.getYear());
+        cal.set(Calendar.MONTH, date.getMonth() - 1);
+        cal.set(Calendar.DAY_OF_MONTH, date.getDay());
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
 }
