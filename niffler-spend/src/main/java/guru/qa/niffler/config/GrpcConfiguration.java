@@ -16,6 +16,13 @@ import org.springframework.context.annotation.Configuration;
 
     net.devh.boot.grpc.common.autoconfigure.GrpcCommonCodecAutoConfiguration.class,
     net.devh.boot.grpc.common.autoconfigure.GrpcCommonTraceAutoConfiguration.class,
+    net.devh.boot.grpc.server.autoconfigure.GrpcAdviceAutoConfiguration.class,
+    net.devh.boot.grpc.server.autoconfigure.GrpcReflectionServiceAutoConfiguration.class,
+    net.devh.boot.grpc.server.autoconfigure.GrpcServerAutoConfiguration.class,
+    net.devh.boot.grpc.server.autoconfigure.GrpcServerFactoryAutoConfiguration.class,
+    net.devh.boot.grpc.server.autoconfigure.GrpcServerMetricAutoConfiguration.class,
+    net.devh.boot.grpc.server.autoconfigure.GrpcServerSecurityAutoConfiguration.class,
+    net.devh.boot.grpc.server.autoconfigure.GrpcServerTraceAutoConfiguration.class
 })
 public class GrpcConfiguration {
 

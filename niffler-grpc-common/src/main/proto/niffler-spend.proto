@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "niffler-model.proto";
+import "google/type/date.proto";
+
+package guru.qa.grpc.niffler;
+
+option java_multiple_files = true;
+option java_package = "guru.qa.grpc.niffler.grpc";
+option java_outer_classname = "NifflerSpendProto";
+
+service NifflerSpendService {
+  rpc GetSpendsForUser (GetSpendsRequest) returns (GetSpendsResponse) {}
+  rpc SaveSpendForUser (SaveSpendsRequest) returns (SpendJson) {}
+  rpc EditSpendsForUser (SaveSpendsRequest) returns (SpendJson) {}
+  rpc DeleteSpends (DeleteSpendsRequest) returns (google.protobuf.Empty) {}
+  rpc GetStatistic (StatisticRequest) returns (StatisticResponse) {}
+}
+
+message GetSpendsRequest {
+  string username = 1;
+  optional CurrencyValues filterCurrency = 2;
+  optional google.type.Date dateFrom = 3;
+  optional google.type.Date dateTo = 4;
+}
+
+message GetSpendsResponse {
+  repeated SpendJson spendJson = 1;
+}
+
+message SaveSpendsRequest {
+  SpendJson spend = 1;
+}
+
+message DeleteSpendsRequest {
+  string username = 1;
+  repeated string ids = 2;
+}
+
+message StatisticRequest {
+  string username = 1;
+  CurrencyValues userCurrency = 2;
+  optional CurrencyValues filterCurrency = 3;
+  optional google.type.Date dateFrom = 4;
+  optional google.type.Date dateTo = 5;
+}
+
+message StatisticResponse {
+  repeated StatisticJson statisticJson = 1;
+}

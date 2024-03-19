@@ -28,4 +28,13 @@ public class DockerConfig implements Config {
     public String jdbcHost() {
         return "niffler-all-db";
     }
+    @Override
+    public String currencyGrpcHost() {
+        return "currency.niffler.dc";
+    }
+
+    @Override
+    public String spendsGrpcHost() {
+        return "spend.niffler.dc";
+    }
 }
