@@ -1,9 +1,9 @@
 package guru.qa.niffler.page;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage extends BasePage<LoginPage> {
@@ -42,7 +42,14 @@ public class LoginPage extends BasePage<LoginPage> {
 
     @Step("Проверить содержание")
     public LoginPage checkMainContent() {
-        mainContent.should(Condition.visible);
+        mainContent.should(visible);
+        return this;
+    }
+    @Step("Check that page is loaded")
+    @Override
+    public LoginPage waitForPageLoaded() {
+        userNameField.should(visible);
+        passField.should(visible);
         return this;
     }
 }

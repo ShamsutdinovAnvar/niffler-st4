@@ -7,11 +7,11 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface User {
+public @interface UserQueue {
 
-    Point value() default Point.INNER;
+    UserType value() default UserType.COMMON;
 
-    enum Point {
-        INNER, OUTER
+    enum UserType {
+        WITH_FRIENDS, INVITATION_SEND, INVITATION_RECEIVED, COMMON
     }
 }

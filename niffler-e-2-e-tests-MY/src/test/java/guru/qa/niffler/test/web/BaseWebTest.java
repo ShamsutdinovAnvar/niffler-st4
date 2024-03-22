@@ -2,12 +2,11 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Configuration;
 import guru.qa.niffler.config.Config;
-import guru.qa.niffler.jupiter.extension.BrowserExtension;
+import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.page.*;
 import guru.qa.niffler.page.headers.Headers;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith({BrowserExtension.class})
+@WebTest
 public abstract class BaseWebTest {
 
     protected final LoginPage loginPage = new LoginPage();

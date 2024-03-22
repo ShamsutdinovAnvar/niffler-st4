@@ -5,13 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface User {
+@Target(ElementType.METHOD)
+public @interface TestUsers {
+    boolean fake() default false;
 
-    Point value() default Point.INNER;
-
-    enum Point {
-        INNER, OUTER
-    }
+    TestUser[] value() default {};
 }

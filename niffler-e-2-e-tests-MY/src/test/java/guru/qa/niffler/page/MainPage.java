@@ -3,6 +3,8 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import guru.qa.niffler.page.component.SpendingTable;
+import guru.qa.niffler.page.component.Footer;
+import guru.qa.niffler.page.component.Header;
 import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.CollectionCondition.size;
@@ -28,7 +30,16 @@ public class MainPage extends BasePage<MainPage> {
     private final SelenideElement lastMonthFilter = $x("//button[text()='Last month']");
     private final SelenideElement lastTimeFilter = $x("//button[text()='All time']");
     private final SelenideElement deleteSelectedBtn = $x("//button[text()='Delete selected']");
-    public HeaderPage header = new HeaderPage();
+//    public HeaderPage header = new HeaderPage();
+    protected final Header header = new Header();
+    protected final Footer footer = new Footer();
+    public Header getHeader() {
+        return header;
+    }
+
+    public Footer getFooter() {
+        return footer;
+    }
 
     @Step("Выбрать трату с описанием [{description}]")
     public MainPage selectSpendingByDescription(String description) {
@@ -107,6 +118,14 @@ public class MainPage extends BasePage<MainPage> {
     @Step("Click button Delete selected")
     public MainPage clickDeleteSelected() {
         deleteSelectedBtn.click();
+        return this;
+    }
+    @Step("Check that page is loaded")
+    @Override
+    public MainPage waitForPageLoaded() {
+        header.getSelf().should(visible).shouldHave(text("Niffler. The coin keeper."));
+        footer.getSelf().should(visible).shouldHave(text("Study project for QA Automation Advanced. 2023"));
+        spendingTable.getSelf().should(visible).shouldHave(text("History of spendings"));
         return this;
     }
 }
