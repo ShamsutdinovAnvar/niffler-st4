@@ -31,7 +31,10 @@ public abstract class CreateUserExtension implements BeforeEachCallback, Paramet
         for (Map.Entry<User.Point, List<TestUser>> userInfo : usersForTest.entrySet()) {
             List<UserJson> usersForPoint = new ArrayList<>();
             for (TestUser testUser : userInfo.getValue()) {
-                usersForPoint.add(createUser(testUser));
+                UserJson user = createUser(testUser);
+                usersForPoint.add(user);
+                usersForPoint.add(createCategory(testUser,user));
+                usersForPoint.add(createSpend(testUser,user));
             }
             createdUsers.put(userInfo.getKey(), usersForPoint);
         }

@@ -40,8 +40,10 @@ public interface UserDataApi {
     @POST("/updateUserInfo")
     Call<UserJson> updateUserInfo(@Body UserJson user);
 
+
     @GET("/currentUser")
-    Call<UserJson> getUserInfo(@Query("username") String username);
+    Call<UserJson> currentUser(@Query("username") String username);
+
 
     @GET("/allUsers")
     Call<List<UserJson>> getAllUsers(@Query("username") String username);

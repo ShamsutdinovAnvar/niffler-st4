@@ -7,7 +7,7 @@ import guru.qa.niffler.model.spend.SpendJson;
 
 public class DatabaseSpendExtension extends SpendExtension {
 
-    @Override
+//    @Override
     SpendJson create(SpendJson spend) {
 
         CategoryEntity category = new CategoryEntity();

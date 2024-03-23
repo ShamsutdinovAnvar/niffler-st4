@@ -14,10 +14,16 @@ import java.lang.annotation.Target;
 @ExtendWith({RestSpendExtension.class})
 public @interface GenerateSpend {
 
-    String username();
-    String description();
-    String category();
-    double amount();
-    CurrencyValues currency();
-    String spendDate();
+    String username() default "";
+
+    String description() default "";
+
+    String category() default "";
+
+    double amount() default 0;
+
+    CurrencyValues currency() default CurrencyValues.RUB;
+
+    boolean fake() default false;
+    String spendDate() default "";
 }

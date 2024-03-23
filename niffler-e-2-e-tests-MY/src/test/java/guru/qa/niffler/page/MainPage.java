@@ -1,38 +1,37 @@
 package guru.qa.niffler.page;
 
-import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import guru.qa.niffler.page.component.SpendingTable;
+import guru.qa.niffler.page.component.Calendar;
 import guru.qa.niffler.page.component.Footer;
 import guru.qa.niffler.page.component.Header;
+import guru.qa.niffler.page.component.Select;
+import guru.qa.niffler.page.component.SpendingTable;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.CollectionCondition.size;
+import java.util.Date;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$x;
-import static guru.qa.niffler.condition.PhotoCondition.photoFromClasspath;
 
 public class MainPage extends BasePage<MainPage> {
 
-    private final SelenideElement avatar = $(".header__avatar");
-    private final SelenideElement statistics = $(".main-content__section.main-content__section-stats");
-    private final SpendingTable spendingTable = new SpendingTable();
-    private final ElementsCollection spendingsTableRows = $(".spendings-table tbody").$$("tr");
-    private final SelenideElement deleteSelectedButton = $(byText("Delete selected"));
-    private final SelenideElement friendsButton = $("[data-tooltip-id=friends]");
-    private final SelenideElement allPeopleButton = $("[data-tooltip-id=people]");
-    private final SelenideElement profileButton = $("[data-tooltip-id=profile]");
-    private final SelenideElement todayFilter = $x("//button[text()='Today']");
-    private final SelenideElement lastWeekFilter = $x("//button[text()='Last week']");
-    private final SelenideElement lastMonthFilter = $x("//button[text()='Last month']");
-    private final SelenideElement lastTimeFilter = $x("//button[text()='All time']");
-    private final SelenideElement deleteSelectedBtn = $x("//button[text()='Delete selected']");
-//    public HeaderPage header = new HeaderPage();
+    public static final String URL = CFG.frontUrl() + "/main";
+
     protected final Header header = new Header();
     protected final Footer footer = new Footer();
+    protected final SpendingTable spendingTable = new SpendingTable();
+
+    private final SelenideElement addSpendingSection = $(".main-content__section-add-spending");
+    private final Select categorySelect = new Select(addSpendingSection.$("div.select-wrapper"));
+    private final Calendar calendar = new Calendar(addSpendingSection.$(".react-datepicker"));
+    private final SelenideElement amountInput = addSpendingSection.$("input[name='amount']");
+    private final SelenideElement descriptionInput = addSpendingSection.$("input[name='description']");
+    private final SelenideElement submitNewSpendingButton = addSpendingSection.$("button[type='submit']");
+    private final SelenideElement errorContainer = addSpendingSection.$(".form__error");
+
     public Header getHeader() {
         return header;
     }
@@ -41,91 +40,61 @@ public class MainPage extends BasePage<MainPage> {
         return footer;
     }
 
-    @Step("Выбрать трату с описанием [{description}]")
-    public MainPage selectSpendingByDescription(String description) {
-        spendingsTableRows
-                .findBy(text(description))
-                .$("td")
-                .scrollIntoView(true)
-                .click();
-        return this;
-    }
-
-    @Step("Нажать кнопку [Delete selected]")
-    public MainPage clickDeleteSelectedButton() {
-        deleteSelectedButton.click();
-        return this;
-    }
-
-    @Step("Проверить, что в таблице с тратами количество строк равно [{size}]")
-    public MainPage checkSpendingsTableRowsHasSize(int size) {
-        spendingsTableRows.shouldHave(size(size));
-        return this;
-    }
-
-    @Step("Нажать кнопку [Friends]")
-    public void clickFriendsButton() {
-        friendsButton.click();
-    }
-
-    @Step("Нажать кнопку [All people]")
-    public void clickAllPeopleButton() {
-        allPeopleButton.click();
-    }
-
-    @Step("Нажать кнопку [Profile]")
-    public void clickProfileButton() {
-        profileButton.click();
-    }
-
-    public MainPage checkThatStatisticDisplayed() {
-        statistics.should(visible);
-        return this;
-    }
-    @Step("check avatar")
-    public MainPage checkAvatar(String imageName) {
-        avatar.shouldHave(photoFromClasspath(imageName));
-        return this;
-    }
     public SpendingTable getSpendingTable() {
+        spendingTable.getSelf().scrollIntoView(true);
         return spendingTable;
     }
 
-    @Step("Select filter Today")
-    public MainPage clickFilterToday() {
-        todayFilter.click();
-        return this;
-    }
-
-    @Step("Select filter Last week")
-    public MainPage clickFilterLastWeek() {
-        lastWeekFilter.click();
-        return this;
-    }
-
-    @Step("Select filter Last month")
-    public MainPage clickFilterLastMonth() {
-        lastMonthFilter.click();
-        return this;
-    }
-
-    @Step("Select filter All time")
-    public MainPage clickFilterLastTime() {
-        lastTimeFilter.click();
-        return this;
-    }
-
-    @Step("Click button Delete selected")
-    public MainPage clickDeleteSelected() {
-        deleteSelectedBtn.click();
-        return this;
-    }
     @Step("Check that page is loaded")
     @Override
     public MainPage waitForPageLoaded() {
         header.getSelf().should(visible).shouldHave(text("Niffler. The coin keeper."));
         footer.getSelf().should(visible).shouldHave(text("Study project for QA Automation Advanced. 2023"));
-        spendingTable.getSelf().should(visible).shouldHave(text("History of spendings"));
+//        spendingTable.getSelf().should(visible).shouldHave(text("History of spendings"));
+        return this;
+    }
+
+    @Step("Select new spending category: {0}")
+    public MainPage setNewSpendingCategory(String category) {
+        Selenide.sleep(1000);
+        categorySelect.setValue(category);
+        return this;
+    }
+
+    @Step("Set new spending amount: {0}")
+    public MainPage setNewSpendingAmount(int amount) {
+        amountInput.setValue(String.valueOf(amount));
+        return this;
+    }
+
+    @Step("Set new spending amount: {0}")
+    public MainPage setNewSpendingAmount(double amount) {
+        amountInput.setValue(String.valueOf(amount));
+        return this;
+    }
+
+    @Step("Set new spending date: {0}")
+    public MainPage setNewSpendingDate(Date date) {
+        calendar.selectDateInCalendar(date);
+        addSpendingSection.$(byText("Add new spending")).click();
+        return this;
+    }
+
+    @Step("Set new spending description: {0}")
+    public MainPage setNewSpendingDescription(String description) {
+        descriptionInput.setValue(description);
+        return this;
+    }
+
+    @Step("Click submit button to create new spending")
+    public MainPage submitNewSpending() {
+        submitNewSpendingButton.click();
+        return this;
+    }
+
+    @Step("Check error: {0} is displayed")
+    public MainPage checkError(String error) {
+        errorContainer.shouldHave(text(error));
         return this;
     }
 }

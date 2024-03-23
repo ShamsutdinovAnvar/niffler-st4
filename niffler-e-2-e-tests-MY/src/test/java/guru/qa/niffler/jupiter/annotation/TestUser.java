@@ -12,6 +12,9 @@ public @interface TestUser {
     String username() default "";
 
     String password() default "";
+    GenerateCategory categories() default @GenerateCategory(fake = true);
+
+    GenerateSpend spend() default @GenerateSpend(fake = true);
 
     boolean runnable() default true;
 }

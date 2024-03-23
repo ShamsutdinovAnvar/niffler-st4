@@ -1,14 +1,20 @@
 package guru.qa.niffler.page;
+
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class FriendsPage extends BasePage<FriendsPage> {
+
     public static final String URL = CFG.frontUrl() + "/friends";
-    private final SelenideElement friendsTable = $(".abstract-table__buttons"),
-            friendsTableUserName = $(".abstract-table tbody");
+    private final SelenideElement friendsTable = $(".abstract-table__buttons");
+    private final SelenideElement friendsTableUserName = $(".abstract-table tbody");
+    private final SelenideElement tableContainer = $(".people-content");
+
     @Step("Проверка, что в таблице Friends есть друг: {name} со статусом: {state}")
     public FriendsPage checkFriendsTable(String name, String state) {
         friendsTable.$$("tr")
@@ -23,6 +29,12 @@ public class FriendsPage extends BasePage<FriendsPage> {
                 .find(text(name))
                 .$("button[class='button-icon button-icon_type_submit']")
                 .shouldBe(visible);
+        return this;
+    }
+    @Step("Check that the page is loaded")
+    @Override
+    public FriendsPage waitForPageLoaded() {
+        tableContainer.shouldBe(Condition.visible);
         return this;
     }
 }

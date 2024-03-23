@@ -27,4 +27,15 @@ public record UserJson(
         @JsonIgnore
         TestData testData
 ) {
+        public UserJson additionTestData(TestData testData) {
+                return new UserJson(id,
+                        username,
+                        firstname,
+                        surname,
+                        currency,
+                        photo,
+                        friendState,
+                        testData
+                );
+        }
 }

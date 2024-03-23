@@ -1,5 +1,6 @@
 package guru.qa.niffler.page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
@@ -11,8 +12,7 @@ public class RegisterPage extends BasePage<RegisterPage> {
     private final SelenideElement passwordInput = $("#password");
     private final SelenideElement confirmPasswordInput = $("#passwordSubmit");
     private final SelenideElement submitBtn = $("button.form__submit");
-
-
+    private final SelenideElement tableContainer = $(".people-content");
 
     @Step("Указать имя пользователя '{username}'")
     public RegisterPage setUsername(String username) {
@@ -36,5 +36,11 @@ public class RegisterPage extends BasePage<RegisterPage> {
     public MainPage submit() {
         submitBtn.click();
         return new MainPage();
+    }
+    @Step("Check that the page is loaded")
+    @Override
+    public RegisterPage waitForPageLoaded() {
+        tableContainer.shouldBe(Condition.visible);
+        return this;
     }
 }

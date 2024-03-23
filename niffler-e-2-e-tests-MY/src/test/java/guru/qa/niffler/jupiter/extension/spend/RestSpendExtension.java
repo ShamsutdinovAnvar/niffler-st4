@@ -12,7 +12,7 @@ public class RestSpendExtension extends SpendExtension {
     private static final CategoryApiClient CATEGORY_API = new CategoryApiClient();
     private static final SpendApiClient SPEND_API = new SpendApiClient();
 
-    @Override
+//    @Override
     SpendJson create(SpendJson spend) {
         CategoryJson categoryJson = new CategoryJson(
                 null,

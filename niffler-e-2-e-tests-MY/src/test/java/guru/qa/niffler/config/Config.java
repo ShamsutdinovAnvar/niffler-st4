@@ -9,7 +9,9 @@ public interface Config {
     }
     String authUrl();
     String frontUrl();
-
+    String spendUrl();
+    String userdataUrl();
+    String gatewayUrl();
     String jdbcHost();
     String currencyGrpcHost();
 

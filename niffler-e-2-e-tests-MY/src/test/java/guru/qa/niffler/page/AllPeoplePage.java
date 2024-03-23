@@ -1,5 +1,6 @@
 package guru.qa.niffler.page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import io.qameta.allure.Step;
 
@@ -8,8 +9,9 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class AllPeoplePage extends BasePage<AllPeoplePage> {
 
-    private final SelenideElement allPeopleTableActions = $(".abstract-table__buttons"),
-            allPeopleTableUserName = $(".abstract-table tbody");
+    private final SelenideElement allPeopleTableActions = $(".abstract-table__buttons");
+    private final SelenideElement allPeopleTableUserName = $(".abstract-table tbody");
+    private final SelenideElement tableContainer = $(".people-content");
 
     @Step("Проверка, что в таблице All People есть отправленный запрос в друзья")
     public AllPeoplePage checkAllPeopleTableHasPendingInv(String text) {
@@ -28,6 +30,12 @@ public class AllPeoplePage extends BasePage<AllPeoplePage> {
         allPeopleTableUserName.$$("tr")
                 .find(text(user));
         allPeopleTableUserName.shouldHave(text(status));
+        return this;
+    }
+    @Step("Check that the page is loaded")
+    @Override
+    public AllPeoplePage waitForPageLoaded() {
+        tableContainer.shouldBe(Condition.visible);
         return this;
     }
 }

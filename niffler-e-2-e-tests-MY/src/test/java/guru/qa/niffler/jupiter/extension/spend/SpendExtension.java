@@ -1,20 +1,31 @@
 package guru.qa.niffler.jupiter.extension.spend;
 
-
+import guru.qa.niffler.api.spend.SpendApi;
 import guru.qa.niffler.jupiter.annotation.GenerateSpend;
 import guru.qa.niffler.model.spend.SpendJson;
-import org.junit.jupiter.api.extension.*;
+import okhttp3.OkHttpClient;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.platform.commons.support.AnnotationSupport;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
-import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
-public abstract class SpendExtension implements BeforeEachCallback, ParameterResolver {
+public class SpendExtension implements BeforeEachCallback {
 
     public static final ExtensionContext.Namespace NAMESPACE
             = ExtensionContext.Namespace.create(SpendExtension.class);
 
-    abstract SpendJson create(SpendJson spend);
+    private static final OkHttpClient httpClient = new OkHttpClient.Builder().build();
+    private static final Retrofit retrofit = new Retrofit.Builder()
+            .client(httpClient)
+            .baseUrl("http://127.0.0.1:8093")
+            .addConverterFactory(JacksonConverterFactory.create())
+            .build();
+
+    private final SpendApi spendApi = retrofit.create(SpendApi.class);
 
     @Override
     public void beforeEach(ExtensionContext extensionContext) throws Exception {
@@ -27,8 +38,7 @@ public abstract class SpendExtension implements BeforeEachCallback, ParameterRes
             GenerateSpend spendData = spend.get();
             SpendJson spendJson = new SpendJson(
                     null,
-                    new SimpleDateFormat("yyyy-MM-dd").parse(spendData.spendDate()),
-//                    new Date(),
+                    new Date(),
                     spendData.category(),
                     spendData.currency(),
                     spendData.amount(),
@@ -36,22 +46,9 @@ public abstract class SpendExtension implements BeforeEachCallback, ParameterRes
                     spendData.username()
             );
 
-            SpendJson created = create(spendJson);
+            SpendJson created = spendApi.addSpend(spendJson).execute().body();
             extensionContext.getStore(NAMESPACE)
-                    .put(extensionContext.getUniqueId(), created);
+                    .put("spend", created);
         }
-    }
-
-    @Override
-    public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return parameterContext.getParameter()
-                .getType()
-                .isAssignableFrom(SpendJson.class);
-    }
-
-    @Override
-    public SpendJson resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return extensionContext.getStore(NAMESPACE)
-                .get(extensionContext.getUniqueId(), SpendJson.class);
     }
 }
